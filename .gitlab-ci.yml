@@ -5,5 +5,6 @@ build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Build started"
+    - chmod +x ./gradlew
     - ./gradlew build
     - echo "Build completed"
