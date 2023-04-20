@@ -10,3 +10,5 @@ build-job:       # This job runs in the build stage, which runs first.
     - chmod +x ./gradlew
     - ./gradlew build
     - echo "Build completed"
+rules: 
+  - if: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
