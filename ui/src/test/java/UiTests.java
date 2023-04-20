@@ -1,5 +1,6 @@
+import static com.codeborne.selenide.Selenide.open;
+
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -10,6 +11,6 @@ public class UiTests {
     @DisplayName("UI test Stub")
     public void test(){
         log.info("UI TEST MESSAGE");
-        Assertions.assertEquals(1,1, "TestStub");
+        open("https://rp.epam.com");
     }
 }
