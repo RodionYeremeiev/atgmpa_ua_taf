@@ -11,6 +11,6 @@ public class UiTests {
     @DisplayName("UI test Stub")
     public void test(){
         log.info("UI TEST MESSAGE");
-        open("https://rp.epam.com");
+//        open("https://rp.epam.com");
     }
 }
