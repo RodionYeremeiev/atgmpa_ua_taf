@@ -14,12 +14,12 @@ plugins {
 apply(plugin = "java")
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 ext {
-    set("junit-jupiter.version", "5.7.0")
+    set("junit-jupiter.version", "5.9.2")
 }
 
 
@@ -40,6 +40,8 @@ subprojects {
         implementation("com.codeborne:selenide:5.16.2")
 
         implementation("org.projectlombok:lombok:1.18.26")
+//        annotationProcessor("org.projectlombok:lombok:1.18.26")
+
         implementation("org.slf4j:slf4j-api:1.7.36")
         implementation("ch.qos.logback:logback-classic:1.2.3")
         implementation("ch.qos.logback:logback-core:1.2.3")
@@ -48,6 +50,8 @@ subprojects {
         testImplementation("org.junit.jupiter:junit-jupiter")
         testImplementation("org.junit.vintage:junit-vintage-engine")
         testImplementation("org.junit.jupiter:junit-jupiter-api:latest.release")
+
+        testImplementation("org.testng:testng:7.7.1")
 
         testImplementation("io.rest-assured:rest-assured:5.3.0")
 
@@ -67,5 +71,7 @@ tasks {
             systemProperty("browser.remote", "true")
             systemProperty("selenide.remote", "http://${project.property("grid")}:4444/wd/hub")
         }
+        systemProperty("username", System.getProperty("username"))
+        systemProperty("password", System.getProperty("password"))
     }
 }
