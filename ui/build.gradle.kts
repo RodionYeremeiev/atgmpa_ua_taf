@@ -2,10 +2,11 @@ plugins {
     id("java")
 }
 
-group = "org.example"
+group = "com.epam"
 version = "unspecified"
 
 tasks.test {
     useJUnitPlatform()
-    useTestNG()
+    systemProperty("username", System.getProperty("username"))
+    systemProperty("password", System.getProperty("password"))
 }

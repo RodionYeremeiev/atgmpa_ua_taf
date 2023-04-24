@@ -2,7 +2,7 @@ plugins {
     id("java")
 }
 
-group = "org.example"
+group = "com.epam"
 version = "unspecified"
 
 //repositories {

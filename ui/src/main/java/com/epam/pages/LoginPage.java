@@ -19,15 +19,15 @@ public class LoginPage {
         wrapper.$(loginButton).shouldBe(visible, enabled);
     }
 
-    public LoginPage withUserName(String userName){
+    public LoginPage withUserName(String username){
         waitWhileReady();
-        loginField.setValue(userName);
+        loginField.setValue(username);
         return this;
     }
 
-    public LoginPage withPassword(String passWord){
+    public LoginPage withPassword(String password){
         waitWhileReady();
-        passwordField.setValue(passWord);
+        passwordField.setValue(password);
         return this;
     }
 
