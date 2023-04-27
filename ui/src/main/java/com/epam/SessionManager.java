@@ -1,0 +1,29 @@
+package com.epam;
+
+import com.codeborne.selenide.Selenide;
+import com.epam.pages.DashBoardsPage;
+import com.epam.pages.LoginPage;
+import lombok.extern.slf4j.Slf4j;
+
+import static com.codeborne.selenide.Selenide.open;
+
+@Slf4j
+public class SessionManager {
+
+    public void setup() {
+        log.info("Login to Portal Login Page and open DashBoards page");
+        open("https://reportportal.epam.com");
+        String username = System.getProperty("username");
+        String password = System.getProperty("password");
+        new LoginPage().withUserName(username).withPassword(password).login();
+        new DashBoardsPage().waitWhileReady();
+    }
+
+    public void tearDown() {
+        Selenide.closeWebDriver();
+    }
+
+    public void openReportPortal(){
+        open("https://reportportal.epam.com");
+    }
+}

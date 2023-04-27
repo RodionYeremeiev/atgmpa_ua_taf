@@ -50,8 +50,6 @@ subprojects {
         testImplementation("org.junit.vintage:junit-vintage-engine")
         testImplementation("org.junit.jupiter:junit-jupiter-api:latest.release")
 
-//        testImplementation("org.testng:testng:7.7.1")
-
         testImplementation("io.rest-assured:rest-assured:5.3.0")
 
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:latest.release")
@@ -62,7 +60,7 @@ tasks {
     test {
         useJUnitPlatform()
 
-        systemProperty("wdm.chromeDriverVersion", "86")
+        systemProperty("wdm.chromeDriverVersion", "112")
         if (project.hasProperty("browser")) {
             systemProperty("browser", project.property("browser") ?: "chrome")
         }
@@ -71,8 +69,5 @@ tasks {
             systemProperty("browser.remote", "true")
             systemProperty("selenide.remote", "http://${project.property("grid")}:4444/wd/hub")
         }
-
-        systemProperty("username", System.getProperty("username"))
-        systemProperty("password", System.getProperty("password"))
     }
 }

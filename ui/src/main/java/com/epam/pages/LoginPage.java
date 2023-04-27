@@ -1,11 +1,13 @@
 package com.epam.pages;
 
 import com.codeborne.selenide.SelenideElement;
+import lombok.extern.slf4j.Slf4j;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static org.openqa.selenium.By.name;
 
+@Slf4j
 public class LoginPage {
     private final SelenideElement wrapper = $("[class^=loginPage] [class^=pageBlockContainer]");
     private final SelenideElement loginField = $(name("login"));
@@ -31,9 +33,8 @@ public class LoginPage {
         return this;
     }
 
-    public LoginPage login(){
+    public void login(){
         waitWhileReady();
         wrapper.$(loginButton).click();
-        return this;
     }
 }
