@@ -1,11 +1,18 @@
 package com.epam.pages;
 
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selectors.*;
+import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.enabled;
+import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selectors.byTitle;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-import com.codeborne.selenide.*;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selectors;
+import com.codeborne.selenide.CollectionCondition;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -24,12 +31,12 @@ public class DashBoardsPage {
     private final ElementsCollection widgetTypes = $$("[class*=widget-type-item-name]");
     private final SelenideElement nextStepButton = $(byText("Next step"));
     private final SelenideElement demoFilterRadio = $(byText("DEMO_FILTER"));
+    private final SelenideElement errorInput = $("[class*=input__error]");
 
-    public DashBoardsPage waitWhileReady() {
+    public void waitWhileReady() {
         wrapper.should(exist);
         title.shouldBe(visible);
         addButton.shouldBe(visible, enabled);
-        return this;
     }
 
     public DashBoardsPage addNewDashBoard() {
@@ -40,6 +47,26 @@ public class DashBoardsPage {
         addButtonModal.click();
         $(byTitle(name)).shouldBe(visible);
         return this;
+    }
+
+    public DashBoardsPage clickAddNewDashBoardButton(){
+        addButton.click();
+        addNewDashboardModalHeader.shouldBe(visible);
+        return this;
+    }
+
+    public DashBoardsPage inputDashBoardName(String name){
+        enterDashboardNameInput.setValue(name);
+        return this;
+    }
+
+    public DashBoardsPage clickAddButtonModal(){
+        addButtonModal.click();
+        return this;
+    }
+
+    public void checkDashBoardPresent(String name){
+        $(byTitle(name)).shouldBe(visible);
     }
 
     public DashBoardsPage selectFirstDashBoard() {
@@ -75,5 +102,9 @@ public class DashBoardsPage {
 
     public ElementsCollection existingWidgets() {
         return widgetNames.shouldHave(CollectionCondition.sizeGreaterThan(1));
+    }
+
+    public void checkErrorPresent() {
+        errorInput.shouldBe(visible);
     }
 }

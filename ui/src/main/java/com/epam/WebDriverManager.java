@@ -8,14 +8,14 @@ import lombok.extern.slf4j.Slf4j;
 import static com.codeborne.selenide.Selenide.open;
 
 @Slf4j
-public class SessionManager {
+public class WebDriverManager {
 
     public void setup() {
         log.info("Login to Portal Login Page and open DashBoards page");
         open("https://reportportal.epam.com");
         String username = System.getProperty("username");
         String password = System.getProperty("password");
-        new LoginPage().withUserName(username).withPassword(password).login();
+        new LoginPage().enterUserName(username).enterPassword(password).clickLoginButton();
         new DashBoardsPage().waitWhileReady();
     }
 
