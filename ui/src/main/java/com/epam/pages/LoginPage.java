@@ -1,11 +1,15 @@
 package com.epam.pages;
 
 import com.codeborne.selenide.SelenideElement;
+import lombok.extern.slf4j.Slf4j;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Selenide.$;
 import static org.openqa.selenium.By.name;
 
+@Slf4j
 public class LoginPage {
     private final SelenideElement wrapper = $("[class^=loginPage] [class^=pageBlockContainer]");
     private final SelenideElement loginField = $(name("login"));
@@ -19,21 +23,20 @@ public class LoginPage {
         wrapper.$(loginButton).shouldBe(visible, enabled);
     }
 
-    public LoginPage withUserName(String userName){
+    public LoginPage enterUserName(String username){
         waitWhileReady();
-        loginField.setValue(userName);
+        loginField.setValue(username);
         return this;
     }
 
-    public LoginPage withPassword(String passWord){
+    public LoginPage enterPassword(String password){
         waitWhileReady();
-        passwordField.setValue(passWord);
+        passwordField.setValue(password);
         return this;
     }
 
-    public LoginPage login(){
+    public void clickLoginButton(){
         waitWhileReady();
         wrapper.$(loginButton).click();
-        return this;
     }
 }
