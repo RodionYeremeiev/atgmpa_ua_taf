@@ -8,7 +8,8 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         features= {"src/test/java/com/epam/features"},
         glue = {"com/epam/stepdefinitions", "com/epam/hooks"},
-        plugin = {"pretty"}
+        plugin = {"pretty",
+        "html:build/reports/cucumber_html_report.html"}
 )
 public class CucumberRunner {
 }

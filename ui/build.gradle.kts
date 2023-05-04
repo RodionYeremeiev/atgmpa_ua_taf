@@ -9,11 +9,6 @@ version = "unspecified"
 dependencies {
     implementation("io.cucumber:cucumber-java:6.10.4")
     testImplementation("io.cucumber:cucumber-junit:7.11.2")
-//    testImplementation("io.cucumber:cucumber-junit-platform-engine:7.11.2")
-    testImplementation("org.assertj:assertj-core:3.11.1")
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("org.junit.vintage:junit-vintage-engine")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:latest.release")
 }
 
 cucumber {
