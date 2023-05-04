@@ -96,8 +96,13 @@ public class DashBoardsPage {
 
     public DashBoardsPage saveWidget() {
         addButtonModal.shouldBe(enabled).click();
-        $(byText("Widget has been added")).shouldBe(visible);
         return this;
+    }
+
+    public Boolean widgetAddedMessageDisplayed(){
+        SelenideElement widgetHasBeenAddedMessage = $(byText("Widget has been added"));
+        widgetHasBeenAddedMessage.shouldBe(visible);
+        return widgetHasBeenAddedMessage.isDisplayed();
     }
 
     public ElementsCollection existingWidgets() {
