@@ -105,10 +105,6 @@ public class DashBoardsPage {
         return widgetHasBeenAddedMessage.isDisplayed();
     }
 
-    public ElementsCollection existingWidgets() {
-        return widgetNames.shouldHave(CollectionCondition.sizeGreaterThan(1));
-    }
-
     public void checkErrorPresent() {
         errorInput.shouldBe(visible);
     }
