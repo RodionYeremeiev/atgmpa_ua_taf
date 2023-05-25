@@ -1,0 +1,32 @@
+package com.epam.controllers;
+
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+
+import static io.restassured.RestAssured.given;
+
+public class ApiController {
+
+    public Response getRequest(String baseUrl, String endPoint, String authToken) {
+        return given()
+                .baseUri(baseUrl)
+                .header("Authorization", "Bearer ".concat(authToken))
+                .when()
+                .get(endPoint);
+    }
+
+    public Response postRequest(String baseUrl, String endPoint, String authToken, Object body) {
+        return given()
+                .baseUri(baseUrl)
+                .header("Authorization", "Bearer ".concat(authToken))
+                .contentType(ContentType.JSON)
+                .when()
+                .body(body)
+                .post(endPoint);
+    }
+
+    public void checkStatusCode(Response response, int expectedStatusCode){
+        response.then().log().all().assertThat().statusCode(expectedStatusCode);
+    }
+
+}
