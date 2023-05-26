@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class NewDashBoard {
+public class CreateDashBoardBody {
     private String description;
     private String name;
     private boolean share;

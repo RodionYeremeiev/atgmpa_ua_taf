@@ -25,6 +25,14 @@ public class ApiController {
                 .post(endPoint);
     }
 
+    public Response deleteRequest(String baseUrl, String endPoint, String authToken) {
+        return given()
+                .baseUri(baseUrl)
+                .header("Authorization", "Bearer ".concat(authToken))
+                .when()
+                .delete(endPoint);
+    }
+
     public void checkStatusCode(Response response, int expectedStatusCode){
         response.then().log().all().assertThat().statusCode(expectedStatusCode);
     }

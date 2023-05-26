@@ -2,7 +2,9 @@ package com.epam;
 
 import com.epam.controllers.ApiController;
 import com.epam.controllers.DashBoardsController;
-import com.epam.models.ErrorMessage;
+import com.epam.models.DashCreateResponse;
+import com.epam.models.ErrorMessageResponse;
+import com.epam.models.MessageResponse;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -22,6 +24,8 @@ public class ApiTests {
 
     public static final String INCORRECT_NAME_SIZE_MESSAGE = "Incorrect Request. [Field 'name' should have size from '3' to '128'.] ";
     public static final String DASHBOARD_WITH_INVALID_ID_MESSAGE = "Dashboard with ID '%s' not found on project 'testuseratgmpa_personal'. Did you use correct Dashboard ID?";
+    public static final String DASHBOARD_DELETED_MESSAGE = "Dashboard with ID = '%s' successfully deleted.";
+    public static final int INVALID_ID = 565656;
     private final DashBoardsController dashBoardsController = new DashBoardsController();
     private final ApiController api = new ApiController();
 
@@ -34,20 +38,14 @@ public class ApiTests {
     @Test
     @DisplayName("Get DashBoard By Valid ID Test")
     public void getValidDashBoardTest() {
-        api.checkStatusCode(dashBoardsController.getDashBoardById("104606"), 200);
+        api.checkStatusCode(dashBoardsController.getDashBoardById(104606), 200);
     }
 
     @Test
     @DisplayName("Get DashBoard By Invalid ID Test")
     public void getInvalidDashBoardTest() {
-        String invalidId = "565656";
-        Response response = dashBoardsController.getDashBoardById(invalidId);
-        ErrorMessage errorMessage = response.as(ErrorMessage.class);
-        assertThat(errorMessage.getErrorCode())
-                .isEqualTo(40422);
-        assertThat(errorMessage.getMessage())
-                .isEqualTo(String.format(DASHBOARD_WITH_INVALID_ID_MESSAGE, invalidId));
-        api.checkStatusCode(response, 404);
+        Response response = dashBoardsController.getDashBoardById(INVALID_ID);
+        verifyDashBoardNotFound(response);
     }
 
     @Test
@@ -60,7 +58,7 @@ public class ApiTests {
     @MethodSource("invalidDashNames")
     public void createDashBoardLongNameTest(String name) {
         Response response = dashBoardsController.createDashBoard(name);
-        ErrorMessage errorMessage = response.as(ErrorMessage.class);
+        ErrorMessageResponse errorMessage = response.as(ErrorMessageResponse.class);
         assertThat(errorMessage.getErrorCode())
                 .isEqualTo(4001);
         assertThat(errorMessage.getMessage())
@@ -68,10 +66,46 @@ public class ApiTests {
         api.checkStatusCode(response, 400);
     }
 
+    @Test
+    @DisplayName("Delete DashBoard with Valid ID Test")
+    public void deleteDashBoardValidIdTest() {
+        Response createResponse = dashBoardsController.createDashBoard();
+        api.checkStatusCode(createResponse, 201);
+        int id = createResponse.as(DashCreateResponse.class).getId();
+        Response deleteResponse = dashBoardsController.deleteDashboard(id);
+        api.checkStatusCode(deleteResponse, 200);
+        String message = deleteResponse.as(MessageResponse.class).getMessage();
+        assertThat(message)
+                .as("Verify Dash Board deleted")
+                .isEqualTo(String.format(DASHBOARD_DELETED_MESSAGE, id));
+    }
+
+    @Test
+    @DisplayName("Delete DashBoard with Invalid ID Test")
+    public void deleteDashBoardInvalidIdTest() {
+        Response response = dashBoardsController.deleteDashboard(INVALID_ID);
+        verifyDashBoardNotFound(response);
+    }
+
+    // TODO add Tests For PUT request:
+    //  1 positive test,
+    //  2 Negative tests
+
+    private void verifyDashBoardNotFound(Response response) {
+        ErrorMessageResponse errorMessage = response.as(ErrorMessageResponse.class);
+        assertThat(errorMessage.getErrorCode())
+                .isEqualTo(40422);
+        assertThat(errorMessage.getMessage())
+                .isEqualTo(String.format(DASHBOARD_WITH_INVALID_ID_MESSAGE, INVALID_ID));
+        api.checkStatusCode(response, 404);
+    }
+
     private static Stream<Arguments> invalidDashNames() {
         return Stream.of(
-                Arguments.of(Named.named("Create DashBoard with 130 symbols name Test", RandomStringUtils.random(130))),
-                Arguments.of(Named.named("Create DashBoard with 1 symbol name Test", RandomStringUtils.random(1)))
+                Arguments.of(Named.named("Create DashBoard with 130 symbols name Test",
+                        RandomStringUtils.random(130))),
+                Arguments.of(Named.named("Create DashBoard with 1 symbol name Test",
+                        RandomStringUtils.random(1)))
         );
     }
 }

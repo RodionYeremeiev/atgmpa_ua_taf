@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @Builder
-public class DashCreateSuccess {
+public class DashCreateResponse {
     private int id;
 }
