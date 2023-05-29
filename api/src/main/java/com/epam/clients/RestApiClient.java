@@ -1,11 +1,11 @@
-package com.epam.controllers;
+package com.epam.clients;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
 
-public class ApiController {
+public class RestApiClient {
 
     public Response getRequest(String baseUrl, String endPoint, String authToken) {
         return given()

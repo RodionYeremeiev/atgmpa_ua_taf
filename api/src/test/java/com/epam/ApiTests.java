@@ -1,7 +1,7 @@
 package com.epam;
 
-import com.epam.controllers.ApiController;
-import com.epam.controllers.DashBoardsController;
+import com.epam.clients.RestApiClient;
+import com.epam.clients.DashBoardsApiClient;
 import com.epam.models.DashCreateResponse;
 import com.epam.models.ErrorMessageResponse;
 import com.epam.models.MessageResponse;
@@ -22,57 +22,57 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class ApiTests {
 
-    public static final String INCORRECT_NAME_SIZE_MESSAGE = "Incorrect Request. [Field 'name' should have size from '3' to '128'.] ";
-    public static final String DASHBOARD_NOT_FOUND_MESSAGE = "Dashboard with ID '%s' not found on project 'testuseratgmpa_personal'. Did you use correct Dashboard ID?";
-    public static final String DASHBOARD_DELETED_MESSAGE = "Dashboard with ID = '%s' successfully deleted.";
-    public static final String DASHBOARD_UPDATED_MESSAGE = "Dashboard with ID = '%s' successfully updated";
-    public static final int NOT_EXIST_ID = 565656;
-    public static final int DEMO_DASH_ID = 104606;
-    private final DashBoardsController dashBoardsController = new DashBoardsController();
-    private final ApiController api = new ApiController();
+    private static final String INCORRECT_NAME_SIZE_MESSAGE = "Incorrect Request. [Field 'name' should have size from '3' to '128'.] ";
+    private static final String DASHBOARD_NOT_FOUND_MESSAGE = "Dashboard with ID '%s' not found on project 'testuseratgmpa_personal'. Did you use correct Dashboard ID?";
+    private static final String DASHBOARD_DELETED_MESSAGE = "Dashboard with ID = '%s' successfully deleted.";
+    private static final String DASHBOARD_UPDATED_MESSAGE = "Dashboard with ID = '%s' successfully updated";
+    private static final int NOT_EXIST_ID = 565656;
+    private static final int DEMO_DASH_ID = 104606;
+    private final DashBoardsApiClient dashClient = new DashBoardsApiClient();
+    private final RestApiClient apiClient = new RestApiClient();
 
     @Test
     @DisplayName("Get DashBoards Test")
     public void getDashBoardsTest() {
-        api.checkStatusCode(dashBoardsController.getDashboards(), 200);
+        apiClient.checkStatusCode(dashClient.getDashboards(), 200);
     }
 
     @Test
     @DisplayName("Get DashBoard By Valid ID Test")
     public void getValidDashBoardTest() {
-        api.checkStatusCode(dashBoardsController.getDashBoardById(DEMO_DASH_ID), 200);
+        apiClient.checkStatusCode(dashClient.getDashBoardById(DEMO_DASH_ID), 200);
     }
 
     @Test
     @DisplayName("Get DashBoard By Invalid ID Test")
     public void getInvalidDashBoardTest() {
-        Response response = dashBoardsController.getDashBoardById(NOT_EXIST_ID);
+        Response response = dashClient.getDashBoardById(NOT_EXIST_ID);
         verifyDashBoardNotFound(response);
     }
 
     @Test
     @DisplayName("Create DashBoard with Valid name Test")
     public void createDashBoardValidNameTest() {
-        api.checkStatusCode(dashBoardsController.createDashBoard(), 201);
+        apiClient.checkStatusCode(dashClient.createDashBoard(), 201);
     }
 
     @ParameterizedTest()
     @MethodSource("invalidDashNames")
     public void createDashBoardInvalidNamesTest(String name) {
-        Response response = dashBoardsController.createDashBoard(name);
+        Response response = dashClient.createDashBoard(name);
         ErrorMessageResponse errorMessage = response.as(ErrorMessageResponse.class);
         assertThat(errorMessage.getErrorCode())
                 .isEqualTo(4001);
         assertThat(errorMessage.getMessage())
                 .isEqualTo(INCORRECT_NAME_SIZE_MESSAGE);
-        api.checkStatusCode(response, 400);
+        apiClient.checkStatusCode(response, 400);
     }
 
     @Test
     @DisplayName("Update DashBoard with Valid ID Test")
     public void updateValidDashBoard(){
-        Response response = dashBoardsController.updateDashBoard(DEMO_DASH_ID);
-        api.checkStatusCode(response, 200);
+        Response response = dashClient.updateDashBoard(DEMO_DASH_ID);
+        apiClient.checkStatusCode(response, 200);
         String message = response.as(MessageResponse.class).getMessage();
         assertThat(message).isEqualTo(String.format(DASHBOARD_UPDATED_MESSAGE, DEMO_DASH_ID));
     }
@@ -80,8 +80,8 @@ public class ApiTests {
     @Test
     @DisplayName("Update Not Existing DashBoard Test")
     public void updateNotExistingDashBoard(){
-        Response response = dashBoardsController.updateDashBoard(NOT_EXIST_ID);
-        api.checkStatusCode(response, 404);
+        Response response = dashClient.updateDashBoard(NOT_EXIST_ID);
+        apiClient.checkStatusCode(response, 404);
         String message = response.as(MessageResponse.class).getMessage();
         assertThat(message)
                 .isEqualTo(String.format(DASHBOARD_NOT_FOUND_MESSAGE, NOT_EXIST_ID));
@@ -91,24 +91,24 @@ public class ApiTests {
     @ParameterizedTest()
     @MethodSource("invalidDashNames")
     public void updateDashBoardInvalidNamesTest(String name) {
-        Response response = dashBoardsController.updateDashBoard(
+        Response response = dashClient.updateDashBoard(
                 DEMO_DASH_ID, name, "WILL NOT BE UPDATED");
         ErrorMessageResponse errorMessage = response.as(ErrorMessageResponse.class);
         assertThat(errorMessage.getErrorCode())
                 .isEqualTo(4001);
         assertThat(errorMessage.getMessage())
                 .isEqualTo(INCORRECT_NAME_SIZE_MESSAGE);
-        api.checkStatusCode(response, 400);
+        apiClient.checkStatusCode(response, 400);
     }
 
     @Test
     @DisplayName("Delete DashBoard with Valid ID Test")
     public void deleteDashBoardValidIdTest() {
-        Response createResponse = dashBoardsController.createDashBoard();
-        api.checkStatusCode(createResponse, 201);
+        Response createResponse = dashClient.createDashBoard();
+        apiClient.checkStatusCode(createResponse, 201);
         int id = createResponse.as(DashCreateResponse.class).getId();
-        Response deleteResponse = dashBoardsController.deleteDashboard(id);
-        api.checkStatusCode(deleteResponse, 200);
+        Response deleteResponse = dashClient.deleteDashboard(id);
+        apiClient.checkStatusCode(deleteResponse, 200);
         String message = deleteResponse.as(MessageResponse.class).getMessage();
         assertThat(message)
                 .as("Verify Dash Board deleted")
@@ -118,7 +118,7 @@ public class ApiTests {
     @Test
     @DisplayName("Delete DashBoard with Invalid ID Test")
     public void deleteDashBoardInvalidIdTest() {
-        Response response = dashBoardsController.deleteDashboard(NOT_EXIST_ID);
+        Response response = dashClient.deleteDashboard(NOT_EXIST_ID);
         verifyDashBoardNotFound(response);
     }
 
@@ -128,7 +128,7 @@ public class ApiTests {
                 .isEqualTo(40422);
         assertThat(errorMessage.getMessage())
                 .isEqualTo(String.format(DASHBOARD_NOT_FOUND_MESSAGE, NOT_EXIST_ID));
-        api.checkStatusCode(response, 404);
+        apiClient.checkStatusCode(response, 404);
     }
 
     private static Stream<Arguments> invalidDashNames() {

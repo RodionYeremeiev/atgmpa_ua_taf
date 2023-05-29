@@ -1,26 +1,26 @@
-package com.epam.controllers;
+package com.epam.clients;
 
 import com.epam.models.CreateDashBoardBody;
 import com.epam.models.dashUpdate.UpdateDashBoardBody;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import static com.epam.config.ApiConfig.baseUrl;
-import static com.epam.config.ApiConfig.dashBoardEndPoint;
-import static com.epam.config.ApiConfig.token;
+import static com.epam.config.ApiConfig.BASE_URL;
+import static com.epam.config.ApiConfig.DASH_BOARDS_END_POINT;
+import static com.epam.config.ApiConfig.TOKEN;
 
-public class DashBoardsController {
+public class DashBoardsApiClient {
 
-    public static final String DASHBOARD_ENDPOINT = dashBoardEndPoint.concat("/%s");
-    private final ApiController api = new ApiController();
+    private static final String DASHBOARD_ENDPOINT = DASH_BOARDS_END_POINT.concat("/%s");
+    private final RestApiClient api = new RestApiClient();
 
     public Response getDashboards() {
-        return api.getRequest(baseUrl, dashBoardEndPoint, token);
+        return api.getRequest(BASE_URL, DASH_BOARDS_END_POINT, TOKEN);
     }
 
     public Response getDashBoardById(int dashBoardId) {
         String endPoint = String.format(DASHBOARD_ENDPOINT, dashBoardId);
-        return api.getRequest(baseUrl, endPoint, token);
+        return api.getRequest(BASE_URL, endPoint, TOKEN);
     }
 
     public Response createDashBoard(String description, String name, boolean isShared) {
@@ -29,7 +29,7 @@ public class DashBoardsController {
                 .name(name)
                 .share(isShared)
                 .build();
-        return api.postRequest(baseUrl, dashBoardEndPoint, token, body);
+        return api.postRequest(BASE_URL, DASH_BOARDS_END_POINT, TOKEN, body);
     }
 
     public Response createDashBoard() {
@@ -48,7 +48,7 @@ public class DashBoardsController {
 
     public Response deleteDashboard(int id) {
         String endPoint = String.format(DASHBOARD_ENDPOINT, id);
-        return api.deleteRequest(baseUrl, endPoint, token);
+        return api.deleteRequest(BASE_URL, endPoint, TOKEN);
     }
 
     public Response updateDashBoard(int id){
@@ -62,6 +62,6 @@ public class DashBoardsController {
                 .name(name)
                 .share(true)
                 .build();
-        return api.putRequest(baseUrl, endPoint, token, body);
+        return api.putRequest(BASE_URL, endPoint, TOKEN, body);
     }
 }
