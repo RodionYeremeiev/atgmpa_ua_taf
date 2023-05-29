@@ -50,8 +50,6 @@ subprojects {
         testImplementation("org.junit.vintage:junit-vintage-engine")
         testImplementation("org.junit.jupiter:junit-jupiter-api:latest.release")
 
-        testImplementation("io.rest-assured:rest-assured:5.3.0")
-
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:latest.release")
     }
 }

@@ -5,15 +5,16 @@ plugins {
 group = "com.epam"
 version = "unspecified"
 
-//repositories {
-//    mavenCentral()
-//}
-//
-//dependencies {
-//    testImplementation(platform("org.junit:junit-bom:5.9.1"))
-//    testImplementation("org.junit.jupiter:junit-jupiter")
-//}
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("io.rest-assured:rest-assured:5.3.0")
+    implementation("io.rest-assured:rest-assured-common:5.3.0")
+}
 
 tasks.test {
     useJUnitPlatform()
+    systemProperty("token", System.getProperty("token"))
 }
