@@ -18,6 +18,8 @@ import com.codeborne.selenide.Condition;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebElement;
 
 import java.time.Duration;
@@ -57,7 +59,7 @@ public class DashBoardsPage {
         SelenideElement testUserProject = currentProjectElements.stream()
                 .filter(
                         element -> element.getAttribute("href").contains(System.getProperty("username").toLowerCase()))
-                .findFirst().get();
+                .findFirst().orElseThrow(NotFoundException::new);
         testUserProject.click();
         return this;
     }
