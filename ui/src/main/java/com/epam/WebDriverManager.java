@@ -16,7 +16,9 @@ public class WebDriverManager {
         String username = System.getProperty("username");
         String password = System.getProperty("password");
         new LoginPage().enterUserName(username).enterPassword(password).clickLoginButton();
-        new DashBoardsPage().waitWhileReady();
+        DashBoardsPage dashBoardsPage = new DashBoardsPage();
+        dashBoardsPage.waitWhileReady();
+        dashBoardsPage.selectTestProject();
     }
 
     public void tearDown() {

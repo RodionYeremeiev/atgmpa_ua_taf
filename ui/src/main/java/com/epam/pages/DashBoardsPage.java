@@ -12,9 +12,18 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.Condition;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.NotFoundException;
+import org.openqa.selenium.WebElement;
+
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 public class DashBoardsPage {
@@ -32,11 +41,27 @@ public class DashBoardsPage {
     private final SelenideElement nextStepButton = $(byText("Next step"));
     private final SelenideElement demoFilterRadio = $(byText("DEMO_FILTER"));
     private final SelenideElement errorInput = $("[class*=input__error]");
+    public final SelenideElement search = $("input[class*=inputSearch__input]");
+    private final ElementsCollection widgets = $$("[class*=react-grid-item]");
+    private final SelenideElement currentProjectSelector = $("[class*=sidebar__main-block]");
+    private final SelenideElement currentProjectsPopup = $("[class*=projects-list]");
+    private final ElementsCollection currentProjectElements = $$("[class*=project-list-item]");
 
     public void waitWhileReady() {
         wrapper.should(exist);
         title.shouldBe(visible);
         addButton.shouldBe(visible, enabled);
+    }
+
+    public DashBoardsPage selectTestProject() {
+        currentProjectSelector.click();
+        currentProjectsPopup.shouldBe(visible);
+        SelenideElement testUserProject = currentProjectElements.stream()
+                .filter(
+                        element -> element.getAttribute("href").contains(System.getProperty("username").toLowerCase()))
+                .findFirst().orElseThrow(NotFoundException::new);
+        testUserProject.click();
+        return this;
     }
 
     public DashBoardsPage addNewDashBoard() {
@@ -100,11 +125,45 @@ public class DashBoardsPage {
         return this;
     }
 
-    public ElementsCollection existingWidgets() {
-        return widgetNames.shouldHave(CollectionCondition.sizeGreaterThan(1));
-    }
-
     public void checkErrorPresent() {
         errorInput.shouldBe(visible);
+    }
+
+    public ElementsCollection getWidgets() {
+        widgets.shouldBe(
+                CollectionCondition.allMatch("Not all widgets are displayed", WebElement::isDisplayed));
+        return widgets;
+    }
+
+    public SelenideElement getFirstWidget(){
+        SelenideElement firstWidget = getWidgets().get(0);
+        firstWidget.shouldBe(Condition.visible);
+        return firstWidget;
+    }
+
+    public void resizeWidget(SelenideElement widget, int xOffset, int yOffset) {
+        Selenide.actions()
+                .clickAndHold(widget.$("[class*=resizable-handle]"))
+                .moveByOffset(xOffset, yOffset)
+                .release()
+                .build()
+                .perform();
+    }
+
+    public void decreaseWidget(SelenideElement widget) {
+        resizeWidget(widget, -75, 0);
+    }
+
+    public void increaseWidget(SelenideElement widget) {
+        resizeWidget(widget, 75, 0);
+    }
+
+    public void selectDemoDashboard() {
+        Selenide.actions()
+                .sendKeys(search, "DEMO", Keys.ENTER)
+                .pause(Duration.of(1, ChronoUnit.SECONDS))
+                .build()
+                .perform();
+        selectFirstDashBoard();
     }
 }
