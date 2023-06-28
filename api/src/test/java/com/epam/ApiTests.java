@@ -82,7 +82,7 @@ public class ApiTests {
     public void updateNotExistingDashBoard(){
         Response response = dashClient.updateDashBoard(NOT_EXIST_ID);
         apiClient.checkStatusCode(response, 404);
-        String message = response.as(MessageResponse.class).getMessage();
+        String message = response.as(ErrorMessageResponse.class).getMessage();
         assertThat(message)
                 .isEqualTo(String.format(DASHBOARD_NOT_FOUND_MESSAGE, NOT_EXIST_ID));
         response.then().log().all();
