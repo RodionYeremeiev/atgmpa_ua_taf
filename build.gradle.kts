@@ -46,6 +46,8 @@ subprojects {
         implementation("ch.qos.logback:logback-classic:1.2.3")
         implementation("ch.qos.logback:logback-core:1.2.3")
 
+        implementation("com.slack.api:slack-api-client:1.29.2")
+
         testImplementation("org.assertj:assertj-core:3.11.1")
 
         testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")

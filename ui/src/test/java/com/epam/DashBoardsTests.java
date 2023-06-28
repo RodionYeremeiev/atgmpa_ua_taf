@@ -1,13 +1,10 @@
 package com.epam;
 
 import com.codeborne.selenide.SelenideElement;
+import com.epam.clients.SlackClient;
 import com.epam.pages.DashBoardsPage;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -25,6 +22,18 @@ public class DashBoardsTests {
 
     private final DashBoardsPage dashBoards = new DashBoardsPage();
     private final WebDriverManager session = new WebDriverManager();
+
+    private static final SlackClient slack = new SlackClient();
+
+    @BeforeAll
+    public static void sendStartMessage() {
+        slack.sendSlackMessage("UI tests started");
+    }
+
+    @AfterAll
+    public static void sendFinishMessage() {
+        slack.sendSlackMessage("UI tests finished");
+    }
 
     @BeforeEach
     public void setup() {

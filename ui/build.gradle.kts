@@ -5,6 +5,10 @@ plugins {
 group = "com.epam"
 version = "unspecified"
 
+dependencies {
+    implementation(project(":api"))
+}
+
 tasks.test {
     useJUnitPlatform()
     systemProperty("username", System.getProperty("username"))
