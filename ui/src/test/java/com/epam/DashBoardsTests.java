@@ -2,9 +2,11 @@ package com.epam;
 
 import com.codeborne.selenide.SelenideElement;
 import com.epam.clients.SlackClient;
+import com.epam.listener.TestResultExtension;
 import com.epam.pages.DashBoardsPage;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -18,6 +20,7 @@ import static org.junit.jupiter.api.Named.named;
 
 @Slf4j
 @DisplayName("Dash Board Tests")
+@ExtendWith(TestResultExtension.class)
 public class DashBoardsTests {
 
     private final DashBoardsPage dashBoards = new DashBoardsPage();
@@ -46,8 +49,8 @@ public class DashBoardsTests {
     }
 
     @Test
-    @DisplayName("Add dash new dashboard Test")
-    @Tag("2")
+    @DisplayName("Add new dashboard Test")
+    @Tag("AUT-T1")
     public void createDashTest() {
         String name = randomNumeric(6);
         dashBoards
@@ -76,7 +79,7 @@ public class DashBoardsTests {
 
     @Test
     @DisplayName("Create dashboard widget Test")
-    @Tag("1")
+    @Tag("AUT-T2")
     public void deleteDashTest() {
         dashBoards.waitWhileReady();
         dashBoards
@@ -90,8 +93,8 @@ public class DashBoardsTests {
     }
 
     @Test
-    @DisplayName("WIDGETS resize")
-    @Tag("1")
+    @DisplayName("Resize widget Test")
+    @Tag("AUT-T3")
     public void resizeTest() {
         dashBoards.selectDemoDashboard();
         SelenideElement widget = dashBoards.getFirstWidget();

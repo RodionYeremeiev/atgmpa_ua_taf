@@ -52,7 +52,7 @@ subprojects {
 
         testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
         testImplementation("org.junit.vintage:junit-vintage-engine:5.9.3")
-        testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
+        implementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
         testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.3")
 
         testImplementation("org.junit.platform:junit-platform-launcher:1.9.2")
