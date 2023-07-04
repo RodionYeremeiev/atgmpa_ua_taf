@@ -4,11 +4,11 @@ buildscript {
     }
     dependencies {
         classpath("io.franzbecker:gradle-lombok:4.0.0")
-        classpath("io.qameta.allure:allure-gradle:2.8.1")
     }
 }
 plugins {
     java
+    id("io.qameta.allure") version "2.11.2"
 }
 
 apply(plugin = "java")
@@ -28,6 +28,7 @@ subprojects {
     apply {
         plugin("java")
         plugin("io.franzbecker.gradle-lombok")
+        plugin("io.qameta.allure")
     }
 
     repositories {
@@ -45,12 +46,25 @@ subprojects {
         implementation("ch.qos.logback:logback-classic:1.2.3")
         implementation("ch.qos.logback:logback-core:1.2.3")
 
-        testImplementation("org.assertj:assertj-core:3.11.1")
-        testImplementation("org.junit.jupiter:junit-jupiter")
-        testImplementation("org.junit.vintage:junit-vintage-engine")
-        testImplementation("org.junit.jupiter:junit-jupiter-api:latest.release")
+        implementation("com.slack.api:slack-api-client:1.29.2")
 
-        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:latest.release")
+        testImplementation("org.assertj:assertj-core:3.11.1")
+
+        testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
+        testImplementation("org.junit.vintage:junit-vintage-engine:5.9.3")
+        implementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
+        testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.3")
+
+        testImplementation("org.junit.platform:junit-platform-launcher:1.9.2")
+        testImplementation ("org.junit.platform:junit-platform-console-standalone:1.9.2")
+
+        testImplementation("org.aspectj:aspectjweaver:1.9.5")
+        testImplementation("io.qameta.allure:allure-junit5:2.13.5")
+        testImplementation("io.qameta.allure:allure-commandline:2.22.4")
+        testImplementation("io.qameta.allure:allure-assertj:2.13.5")
+        testImplementation("io.qameta.allure:allure-rest-assured:2.13.5")
+        testImplementation("io.qameta.allure:allure-java-commons:2.13.5")
+
     }
 }
 

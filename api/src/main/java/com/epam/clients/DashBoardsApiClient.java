@@ -5,9 +5,9 @@ import com.epam.models.dashUpdate.UpdateDashBoardBody;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import static com.epam.config.ApiConfig.BASE_URL;
+import static com.epam.config.ApiConfig.REPORT_PORTAL_BASE_URL;
 import static com.epam.config.ApiConfig.DASH_BOARDS_END_POINT;
-import static com.epam.config.ApiConfig.TOKEN;
+import static com.epam.config.ApiConfig.REPORT_PORTAL_TOKEN;
 
 public class DashBoardsApiClient {
 
@@ -15,12 +15,12 @@ public class DashBoardsApiClient {
     private final RestApiClient api = new RestApiClient();
 
     public Response getDashboards() {
-        return api.getRequest(BASE_URL, DASH_BOARDS_END_POINT, TOKEN);
+        return api.getRequest(REPORT_PORTAL_BASE_URL, DASH_BOARDS_END_POINT, REPORT_PORTAL_TOKEN);
     }
 
     public Response getDashBoardById(int dashBoardId) {
         String endPoint = String.format(DASHBOARD_ENDPOINT, dashBoardId);
-        return api.getRequest(BASE_URL, endPoint, TOKEN);
+        return api.getRequest(REPORT_PORTAL_BASE_URL, endPoint, REPORT_PORTAL_TOKEN);
     }
 
     public Response createDashBoard(String description, String name, boolean isShared) {
@@ -29,7 +29,7 @@ public class DashBoardsApiClient {
                 .name(name)
                 .share(isShared)
                 .build();
-        return api.postRequest(BASE_URL, DASH_BOARDS_END_POINT, TOKEN, body);
+        return api.postRequest(REPORT_PORTAL_BASE_URL, DASH_BOARDS_END_POINT, REPORT_PORTAL_TOKEN, body);
     }
 
     public Response createDashBoard() {
@@ -48,7 +48,7 @@ public class DashBoardsApiClient {
 
     public Response deleteDashboard(int id) {
         String endPoint = String.format(DASHBOARD_ENDPOINT, id);
-        return api.deleteRequest(BASE_URL, endPoint, TOKEN);
+        return api.deleteRequest(REPORT_PORTAL_BASE_URL, endPoint, REPORT_PORTAL_TOKEN);
     }
 
     public Response updateDashBoard(int id){
@@ -62,6 +62,6 @@ public class DashBoardsApiClient {
                 .name(name)
                 .share(true)
                 .build();
-        return api.putRequest(BASE_URL, endPoint, TOKEN, body);
+        return api.putRequest(REPORT_PORTAL_BASE_URL, endPoint, REPORT_PORTAL_TOKEN, body);
     }
 }

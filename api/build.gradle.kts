@@ -16,5 +16,6 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-    systemProperty("token", System.getProperty("token"))
+    systemProperty("reportPortalToken", System.getProperty("reportPortalToken"))
+    systemProperty("slackToken", System.getProperty("slackToken"))
 }

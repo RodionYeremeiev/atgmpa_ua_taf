@@ -2,15 +2,15 @@ package com.epam;
 
 import com.epam.clients.RestApiClient;
 import com.epam.clients.DashBoardsApiClient;
+import com.epam.clients.SlackClient;
 import com.epam.models.DashCreateResponse;
 import com.epam.models.ErrorMessageResponse;
 import com.epam.models.MessageResponse;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Named;
-import org.junit.jupiter.api.Test;
+import org.junit.BeforeClass;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -30,6 +30,18 @@ public class ApiTests {
     private static final int DEMO_DASH_ID = 104606;
     private final DashBoardsApiClient dashClient = new DashBoardsApiClient();
     private final RestApiClient apiClient = new RestApiClient();
+
+    private static final SlackClient slack = new SlackClient();
+
+    @BeforeAll
+    public static void setup() {
+        slack.sendSlackMessage("API tests started");
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        slack.sendSlackMessage("API tests finished");
+    }
 
     @Test
     @DisplayName("Get DashBoards Test")
@@ -82,7 +94,7 @@ public class ApiTests {
     public void updateNotExistingDashBoard(){
         Response response = dashClient.updateDashBoard(NOT_EXIST_ID);
         apiClient.checkStatusCode(response, 404);
-        String message = response.as(MessageResponse.class).getMessage();
+        String message = response.as(ErrorMessageResponse.class).getMessage();
         assertThat(message)
                 .isEqualTo(String.format(DASHBOARD_NOT_FOUND_MESSAGE, NOT_EXIST_ID));
         response.then().log().all();

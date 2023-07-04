@@ -1,10 +1,11 @@
 package com.epam.models;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateDashBoardBody {
     private String description;
     private String name;
